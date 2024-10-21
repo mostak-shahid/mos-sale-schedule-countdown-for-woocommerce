@@ -142,5 +142,27 @@ class Mos_Sale_Schedule_Countdown_For_Woocommerce_Public {
 		</div>
 		<?php 
 	}
+	// add_action('wp_footer', 'footer_content');
+	function mos_sale_schedule_countdown_for_woocommerce_product_main_term() {
+		$product = wc_get_product(get_the_ID());
+		$main_term = 0;
+		$terms = wc_get_product_terms(
+			get_the_ID(),
+			'product_cat',
+			apply_filters(
+				'woocommerce_breadcrumb_product_terms_args',
+				array(
+					'orderby' => 'parent',
+					'order'   => 'DESC',
+				)
+			)
+		);
+		if ( $terms ) {
+			$main_term = apply_filters( 'woocommerce_breadcrumb_main_term', $terms[0], $terms );
+			var_dump($main_term->term_id);
+		}
+		echo $product->is_on_sale();
+		// echo $main_term;
+	}
 
 }

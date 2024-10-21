@@ -189,6 +189,7 @@ class Mos_Sale_Schedule_Countdown_For_Woocommerce
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 		// Save settings by ajax
 		$this->loader->add_action('woocommerce_single_product_summary', $plugin_public, 'mos_sale_schedule_countdown_for_woocommerce_show_coundown');
+		$this->loader->add_action('woocommerce_single_product_summary', $plugin_public, 'mos_sale_schedule_countdown_for_woocommerce_product_main_term');
 
 		$this->loader->add_action('wp_ajax_mos_sale_schedule_countdown_for_woocommerce_ajax_callback', $plugin_public, 'mos_sale_schedule_countdown_for_woocommerce_ajax_callback');
 		$this->loader->add_action('wp_ajax_nopriv_mos_sale_schedule_countdown_for_woocommerce_ajax_callback', $plugin_public, 'mos_sale_schedule_countdown_for_woocommerce_ajax_callback');	
