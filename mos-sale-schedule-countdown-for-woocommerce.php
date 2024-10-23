@@ -87,3 +87,25 @@ function mos_sale_schedule_countdown_for_woocommerce_run()
 	$plugin->run();
 }
 mos_sale_schedule_countdown_for_woocommerce_run();
+
+function wpdocs_custom_timezone_string() {
+    $timezone_string = get_option( 'timezone_string' );
+    $offset  = (float) get_option( 'gmt_offset' );
+    $hours   = (int) $offset;
+    $minutes = ( $offset - $hours );
+    $sign      = ( $offset < 0 ) ? '-' : '+';
+    $abs_hour  = abs( $hours );
+    $abs_mins  = abs( $minutes * 60 );
+    $tz_offset = sprintf( '%s%02d:%02d', $sign, $abs_hour, $abs_mins );
+    $timezone = $timezone_string ? $timezone_string . ' [' . $tz_offset . ']' : $tz_offset;
+
+    // return $timezone;
+    return $tz_offset;
+}
+
+// Usage
+echo esc_html( wpdocs_custom_timezone_string() );
+
+$time_zone = '-06:00';
+$newtimestamp = strtotime('2011-11-17 00:00:00 ' . wpdocs_custom_timezone_string());
+echo date('Y-m-d H:i:s', $newtimestamp);

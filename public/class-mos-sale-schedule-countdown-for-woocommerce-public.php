@@ -129,7 +129,14 @@ class Mos_Sale_Schedule_Countdown_For_Woocommerce_Public {
 		$content = apply_filters('the_content',$content);
 		$from = get_post_meta($product_id, '_sale_price_dates_from', true);
 		$to = get_post_meta($product_id, '_sale_price_dates_to', true);
-		// var_dump(date_i18n( 'Y-m-d', $from));
+		var_dump(date_i18n( 'Y-m-d', $to) . ' 23:59:59');
+		echo '<br/>';
+		var_dump(get_date_from_gmt( date('Y-m-d H:i:s'),'Y-m-d H:i:s' ));
+		echo '<br/>';
+		var_dump(wp_timezone_string());
+		echo '<br/>';
+		
+		echo '<hr/><br/><hr/><br/><hr/>';
 		?>
 		<div class="mos-sale-schedule-countdown-for-woocommerce-countdown-content">
 			<div class="content">
