@@ -160,17 +160,40 @@ class Mos_Sale_Schedule_Countdown_For_Woocommerce
 		$plugin_admin = new Mos_Sale_Schedule_Countdown_For_Woocommerce_Admin($this->get_plugin_name(), $this->get_version());
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
-		// Save settings by ajax
-		$this->loader->add_action('wp_ajax_mos_sale_schedule_countdown_for_woocommerce_reset_settings', $plugin_admin, 'mos_sale_schedule_countdown_for_woocommerce_reset_settings');
 
-		// add_action('woocommerce_product_options_pricing', 'mos_sale_schedule_countdown_for_woocommerce_product_tab_field');
-		$this->loader->add_action('woocommerce_product_options_pricing', $plugin_admin, 'mos_sale_schedule_countdown_for_woocommerce_product_tab_field');
+		if (is_plugin_active('woocommerce/woocommerce.php')) {
+			
+			$this->loader->add_action('admin_menu', $plugin_admin, 'mos_sale_schedule_countdown_for_woocommerce_admin_menu');
+			
+			// Add Settings link to the plugin
+			$plugin_basename = plugin_basename(plugin_dir_path(__DIR__) . $this->plugin_name . '.php');
+			$this->loader->add_filter('plugin_action_links_' . $plugin_basename, $plugin_admin, 'mos_sale_schedule_countdown_for_woocommerce_add_action_links');
 
-		// add_action('save_post', 'mos_sale_schedule_countdown_for_woocommerce_save_product_meta_data');
-		$this->loader->add_action('save_post', $plugin_admin, 'mos_sale_schedule_countdown_for_woocommerce_save_product_meta_data', 10, 3);
+			$this->loader->add_action('admin_init', $plugin_admin, 'mos_sale_schedule_countdown_for_woocommerce_do_activation_redirect');
 
-		// add_action( 'upgrader_process_complete', 'mos_sale_schedule_countdown_for_woocommerce_update_completed', 10, 2 );
-		$this->loader->add_action('upgrader_process_complete', $plugin_admin, 'mos_sale_schedule_countdown_for_woocommerce_update_completed', 10,2);
+			$this->loader->add_filter('admin_body_class', $plugin_admin, 'mos_sale_schedule_countdown_for_woocommerce_admin_body_class');
+
+			// Save settings by ajax
+			$this->loader->add_action('wp_ajax_mos_sale_schedule_countdown_for_woocommerce_reset_settings', $plugin_admin, 'mos_sale_schedule_countdown_for_woocommerce_reset_settings');
+
+			// add_action('woocommerce_product_options_pricing', 'mos_sale_schedule_countdown_for_woocommerce_product_tab_field');
+			$this->loader->add_action('woocommerce_product_options_pricing', $plugin_admin, 'mos_sale_schedule_countdown_for_woocommerce_product_tab_field');
+
+			// add_action('save_post', 'mos_sale_schedule_countdown_for_woocommerce_save_product_meta_data');
+			$this->loader->add_action('save_post', $plugin_admin, 'mos_sale_schedule_countdown_for_woocommerce_save_product_meta_data', 10, 3);
+
+			// add_action( 'upgrader_process_complete', 'mos_sale_schedule_countdown_for_woocommerce_update_completed', 10, 2 );
+			$this->loader->add_action('upgrader_process_complete', $plugin_admin, 'mos_sale_schedule_countdown_for_woocommerce_update_completed', 10,2);
+
+			// add_action( 'admin_init', 'mos_sale_schedule_countdown_for_woocommerce_export' );
+			$this->loader->add_action('admin_init', $plugin_admin, 'mos_sale_schedule_countdown_for_woocommerce_export');
+			// add_action( 'admin_notices', 'mos_sale_schedule_countdown_for_woocommerce_import' );
+			$this->loader->add_action('admin_notices', $plugin_admin, 'mos_sale_schedule_countdown_for_woocommerce_import');
+
+		} else {
+			$this->loader->add_action('admin_notices', $plugin_admin, 'mos_sale_schedule_countdown_for_woocommerce_woo_check');
+			add_action("wp_ajax_mos_sale_schedule_countdown_for_woocommerce_ajax_install_plugin", "wp_ajax_install_plugin");
+		}
 		
 	}
 

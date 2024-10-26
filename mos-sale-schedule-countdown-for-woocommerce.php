@@ -41,6 +41,31 @@ define('MOS_SALE_SCHEDULE_COUNTDOWN_FOR_WOOCOMMERCE_NAME', __('Mos Sale Schedule
 define( 'MOS_SALE_SCHEDULE_COUNTDOWN_FOR_WOOCOMMERCE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MOS_SALE_SCHEDULE_COUNTDOWN_FOR_WOOCOMMERCE_URL', plugin_dir_url( __FILE__ ) );
 
+define('MOS_SALE_SCHEDULE_COUNTDOWN_FOR_WOOCOMMERCE_DEFAULT_OPTIONS', [
+	'countdown' => [
+		'css_class' => 'countdown', // countdown-alt-2, countdown-alt-3
+        'always_show_days' => false,
+        'with_labels' => true,
+        'with_seconds' => true,
+        'with_separators' => false,
+        'with_hh_leading_zero' => true,
+        'with_mm_leading_zero' => true,
+        'with_ss_leading_zero' => true,
+        'label_dd' => 'days',
+        'label_hh' => 'hours',
+        'label_mm' => 'minutes',
+        'label_ss' => 'seconds',
+        'separator' => ':',
+        'separator_days' => ',',
+	],
+	'style' => [],
+    'advanced' => [
+        'css' => '',
+        'js' => ''
+    ]
+]);
+
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-mos-sale-schedule-countdown-for-woocommerce-activator.php
@@ -87,25 +112,23 @@ function mos_sale_schedule_countdown_for_woocommerce_run()
 	$plugin->run();
 }
 mos_sale_schedule_countdown_for_woocommerce_run();
-
-function wpdocs_custom_timezone_string() {
-    $timezone_string = get_option( 'timezone_string' );
-    $offset  = (float) get_option( 'gmt_offset' );
-    $hours   = (int) $offset;
-    $minutes = ( $offset - $hours );
-    $sign      = ( $offset < 0 ) ? '-' : '+';
-    $abs_hour  = abs( $hours );
-    $abs_mins  = abs( $minutes * 60 );
-    $tz_offset = sprintf( '%s%02d:%02d', $sign, $abs_hour, $abs_mins );
-    $timezone = $timezone_string ? $timezone_string . ' [' . $tz_offset . ']' : $tz_offset;
-
-    // return $timezone;
-    return $tz_offset;
+// var_dump(mos_sale_schedule_countdown_for_woocommerce_is_plugin_page());
+// add_action('current_screen', 'mos_sale_schedule_countdown_for_woocommerce_is_plugin_page');
+function mos_sale_schedule_countdown_for_woocommerce_is_plugin_page()
+{
+	if (function_exists('get_current_screen')) {
+		$current_screen = get_current_screen();
+		if (
+			$current_screen->id == 'toplevel_page_mos-sale-schedule-countdown-for-woocommerce'
+		) {
+			return true;
+		}
+	}
+	return false;
 }
-
-// Usage
-echo esc_html( wpdocs_custom_timezone_string() );
-
-$time_zone = '-06:00';
-$newtimestamp = strtotime('2011-11-17 00:00:00 ' . wpdocs_custom_timezone_string());
-echo date('Y-m-d H:i:s', $newtimestamp);
+function mos_sale_schedule_countdown_for_woocommerce_get_option()
+{
+	$mos_sale_schedule_countdown_for_woocommerce_options_database = get_option('mos_sale_schedule_countdown_for_woocommerce_options', []);
+	$mos_sale_schedule_countdown_for_woocommerce_options = array_replace_recursive(MOS_SALE_SCHEDULE_COUNTDOWN_FOR_WOOCOMMERCE_DEFAULT_OPTIONS, $mos_sale_schedule_countdown_for_woocommerce_options_database);
+	return $mos_sale_schedule_countdown_for_woocommerce_options;
+}

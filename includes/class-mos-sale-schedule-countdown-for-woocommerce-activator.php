@@ -32,5 +32,7 @@ class Mos_Sale_Schedule_Countdown_For_Woocommerce_Activator
 	 */
 	public static function activate()
 	{
+		update_option('mos_sale_schedule_countdown_for_woocommerce_options', MOS_SALE_SCHEDULE_COUNTDOWN_FOR_WOOCOMMERCE_DEFAULT_OPTIONS);
+		add_option('mos_sale_schedule_countdown_for_woocommerce_do_activation_redirect', true);
 	}
 }
